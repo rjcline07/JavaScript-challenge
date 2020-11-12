@@ -7,7 +7,7 @@ var tableData = data;
 var tbody = d3.select("tbody");
 
 function buildTable(data) {
-    // clear anything existing
+    // clear anything existing in table
     tbody.html("");
 
     //loop and append
@@ -37,3 +37,9 @@ function handleClick() {
     //rebuild using filtered values where if no date entered just original value
     buildTable(filteredData);
 }
+
+//activates event for filter button
+d3.selectAll("#filter-btn").on("click", handleClick);
+
+//builds on page launch
+buildTable(tableData);
