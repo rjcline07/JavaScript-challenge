@@ -4,30 +4,44 @@ var tableData = data;
 // getting table references
 var tbody = d3.select("tbody");
 
-tableData.forEach(function(UFOReport) {
+
+// putting into webpage
+tableData.forEach(function(sighting) {
     var content = tbody.append("tr");
 
-    Object.values(UFOReport).forEach(function([key,value]) {
+    Object.entries(sighting).forEach(function([key,value]) {
         var block = content.append("td");
         block.text(value);
     });
 });
 
-function onbutton() {
+// button for webpage
+var click = d3.select('#filter-btn');
 
-    //getting datetime value
-    var entry = d3.select("#datetime").property("value");
-    var filtered = tableData;
+//prompts search when activated
+click.on('click', function() {
+    
+    //user entry obtained
+    var entry = d3.select('.form-control');
+    
+    //makes it readable for data
+    var date = entry.property('value');
+    
+    //filter according to entry
+    var filter = tableData.filter(sighting => sighting.datetime == date);
 
-    //check to see if date was entered, filtering to keep matching values
-    if (entry) {filtered = filtered.filter(row => row.datetime == entry)}
+    var tbody = d3.select('tbody');
 
-    //rebuild using filtered values where if no date entered just original value
-    buildTable(filtered);
-};
+    //reset webpage
+    tbody.html("");
 
-//activates event for filter button
-d3.selectAll("#filter-btn").on("click", onbutton);
+    //append data back to webpage
+    filter.forEach(function(sighting){
+        var content = tbody.append("tr");
 
-//builds on page launch
-buildTable(tableData);
+        Object.entries(sighting).forEach(function([key,value]){
+            var block = content.append("td");
+            block.text(value);
+        });
+    })
+});
