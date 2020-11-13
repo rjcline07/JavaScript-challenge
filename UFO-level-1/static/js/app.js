@@ -6,40 +6,30 @@ var tableData = data;
 // getting table references
 var tbody = d3.select("tbody");
 
-function buildTable(data) {
-    // clear anything existing in table
-    tbody.html("");
+tableData.forEach(function(UFOReport) {
+    var content = tbody.append("tr");
 
-    //loop and append
-    data.forEach((dataRow) => {
-        var row = tbody.append("tr");
-
-        //looping and adding as table cell
-        Object.values(dataRow).forEach((val) => {
-            let cell = row.append("td");
-                cell.text(val);
-            }
-        );
+    Object.values(UFOReport).forEach(function([key,value]) {
+        var block = content.append("td");
+        block.text(value);
     });
-}
+});
 
-function handleClick() {
+function onbutton() {
 
     //getting datetime value
-    var date = d3.select("#datetime").property("value");
-    let filteredData = tableData;
+    var entry = d3.select("#datetime").property("value");
+    var filtered = tableData;
 
     //check to see if date was entered, filtering to keep matching values
-    if (date) {
-        filteredData = filteredData.filter(row => row.datetime == date);
-    }
+    if (entry) {filtered = filtered.filter(row => row.datetime == entry)}
 
     //rebuild using filtered values where if no date entered just original value
-    buildTable(filteredData);
-}
+    buildTable(filtered);
+};
 
 //activates event for filter button
-d3.selectAll("#filter-btn").on("click", handleClick);
+d3.selectAll("#filter-btn").on("click", onbutton);
 
 //builds on page launch
 buildTable(tableData);
